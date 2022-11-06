@@ -80,6 +80,16 @@ WHERE continent IS NOT NULL
 GROUP BY location
 ORDER BY death_count DESC
 
+-- 30 countries with least death count per population
+
+SELECT TOP 30
+	location
+	,CAST(MAX(total_deaths) as int) AS death_count
+FROM CovidDeaths
+WHERE continent IS NOT NULL AND total_deaths >= 1
+GROUP BY location
+ORDER BY death_count 
+
 -- By continent
 
 
