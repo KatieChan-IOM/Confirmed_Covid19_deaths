@@ -52,7 +52,7 @@ SELECT TOP 30
 	,CV.population
 	,CAST((MAX(CD.total_cases) / CV.population * 100) as numeric(10,6)) AS infected_rate
 FROM CovidDeaths AS CD
-JOIN CovidVaccination AS CV On CD.location = CV.location AND CD.date = CV.date
+JOIN CovidVaccination AS CV ON CD.location = CV.location AND CD.date = CV.date
 WHERE CD.continent IS NOT NULL 
 GROUP BY CD.location, CV.population
 ORDER BY infected_rate DESC
@@ -84,7 +84,7 @@ ORDER BY death_count DESC
 
 SELECT TOP 30
 	location
-	,CAST(MAX(total_deaths) as int) AS death_count
+	,MAX(CAST(total_deaths as int)) AS death_count
 FROM CovidDeaths
 WHERE continent IS NOT NULL AND total_deaths >= 1
 GROUP BY location
@@ -92,20 +92,32 @@ ORDER BY death_count
 
 -- By continent
 
-
--- Top 30 contintents with the most death count per population
-
+SELECT continent
+		,MAX(cast(Total_deaths as int)) AS death_count
+FROM CovidDeaths
+WHERE continent IS NOT NULL
+GROUP BY continent
+ORDER BY death_count DESC
 
 -- Globally
 
+SELECT SUM(new_cases) AS total_cases
+		,SUM(CAST(new_deaths as int)) AS total_deaths
+		,SUM(cast(new_deaths as int)) / SUM(New_Cases) * 100 AS death_percentage
+FROM CovidDeaths
+where continent is not null 
+order by total_cases, total_deaths
 
 -- Percentage of population that has recieved at least one Covid Vaccine
+
 
 
 -- Using CTE to perform calculation on partition by 
 
 
+
 -- Using temp table to perform calculation on partition by
+
 
 
 -- Creating view to store data for visualizations later on
